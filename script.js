@@ -27,5 +27,23 @@ function operate(operator, a, b) {
     }
 }
 
+function inputDisplay(input) {
+    const display = document.querySelector('#display')
+    display.textContent += input;
+}
+
+function clearInput() {
+    const display = document.querySelector('#display')
+    display.textContent = "";
+}
+
+const clearEntry = document.querySelector('#clear');
+clearEntry.addEventListener('click', clearInput);
+
+const numbers = document.querySelectorAll('.number');
+numbers.forEach((number) => number.addEventListener('click',function() {
+    inputDisplay(this.textContent);
+}));
+    
 let firstNumber, operator, secondNumber;
 
