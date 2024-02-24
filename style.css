@@ -1,0 +1,56 @@
+#calculator{
+    width: 350px;
+    margin: 64px auto;
+    background-color: darkslategray;
+    border-radius: 16px;
+    border-style:solid;
+    border-color: black;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#header{
+    color: white;
+    text-align: center;
+    font-weight: 900;
+    padding: 8px 0;
+}
+
+#display{
+    background-color:khaki;
+    color:darkgreen;
+    font-size: 48px;
+    text-align: right;
+    font-family: monospace;
+    margin: 0 16px;
+    padding: 0 16px;
+    border-style: solid;
+    border-color:dimgray;
+}
+
+#buttons{
+    padding: 48px 16px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap:8px;
+}
+
+button{
+    height: 48px;
+    min-width: 64px;
+    flex: 1;
+    border-radius: 8px;
+    font-size: 24px;
+    font-weight: 900;
+}
+
+#clear{
+    background-color:crimson;
+}
+
+#equals{
+    background-color: limegreen;
+}
+
+.op{
+    background-color: cornflowerblue;
+}
