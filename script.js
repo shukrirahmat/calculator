@@ -20,30 +20,59 @@ function operate(operator, a, b) {
             return add(a,b);
         case '-':
             return subtract(a,b);
-        case '*':
+        case 'x':
             return multiply(a,b);
-        case '/':
+        case '÷':
             return divide(a,b);
     }
 }
 
 function inputDisplay(input) {
-    const display = document.querySelector('#display')
     display.textContent += input;
 }
 
 function clearInput() {
-    const display = document.querySelector('#display')
     display.textContent = "";
+    storedNumber = "";
 }
+
+let firstNumber, operator, secondNumber;
+let storedNumber = "";
+
+const display = document.querySelector('#display')
 
 const clearEntry = document.querySelector('#clear');
 clearEntry.addEventListener('click', clearInput);
 
-const numbers = document.querySelectorAll('.number');
-numbers.forEach((number) => number.addEventListener('click',function() {
+const numbersButton = document.querySelectorAll('.number');
+numbersButton.forEach((number) => number.addEventListener('click',function() {
     inputDisplay(this.textContent);
+    storedNumber += this.textContent;
 }));
-    
-let firstNumber, operator, secondNumber;
+
+const opButton = document.querySelectorAll('.op');
+opButton.forEach((op) => op.addEventListener('click', 
+function() {
+    if (storedNumber === "") {
+        firstNumber = 0;
+    } else {
+        firstNumber = parseInt(storedNumber);
+    }
+    storedNumber = "";
+    operator = this.textContent;
+    display.textContent += operator;
+}));
+
+const equalsButton = document.querySelector('#equals');
+equalsButton.addEventListener('click', 
+function() {
+    if (storedNumber === "") {
+        secondNumber = 0;
+    } else {
+        secondNumber = parseInt(storedNumber);
+    }
+    storedNumber = "";
+    display.textContent = operate(operator, firstNumber,secondNumber);
+})
+
 
