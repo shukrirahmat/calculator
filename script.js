@@ -31,6 +31,7 @@ function operate(operator, aStr, bStr) {
 
 function updateInputDisplay(input) {
     if (waitingForNextNumber) {
+        updateOperationDisplay();
         inputDisplay.textContent = "";
         waitingForNextNumber = false;
     }
@@ -46,10 +47,14 @@ function updateOperationDisplay() {
 
 function clearInput() {
    inputDisplay.textContent = '0';
-   firstNumber = "";
-   operator = "";
-   secondNumber = "";
+   clearOperation();
    updateOperationDisplay();
+}
+
+function clearOperation() {
+    firstNumber = "";
+    operator = "";
+    secondNumber = "";
 }
 
 let firstNumber = "";
@@ -95,6 +100,7 @@ function() {
             inputDisplay.textContent = operate(operator, firstNumber, secondNumber);
         }
         updateOperationDisplay();
+        clearOperation();
         waitingForNextNumber = true;
     }
 })
