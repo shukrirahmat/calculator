@@ -28,16 +28,19 @@ function operate(operator, a, b) {
 }
 
 function inputDisplay(input) {
+    if (clearNext === true) {
+        clearInput();
+        clearNext = false;
+    }
     display.textContent += input;
 }
 
 function clearInput() {
     display.textContent = "";
-    storedNumber = "";
 }
 
 let firstNumber, operator, secondNumber;
-let storedNumber = "";
+let clearNext = true;
 
 const display = document.querySelector('#display')
 
@@ -47,32 +50,30 @@ clearEntry.addEventListener('click', clearInput);
 const numbersButton = document.querySelectorAll('.number');
 numbersButton.forEach((number) => number.addEventListener('click',function() {
     inputDisplay(this.textContent);
-    storedNumber += this.textContent;
 }));
 
 const opButton = document.querySelectorAll('.op');
 opButton.forEach((op) => op.addEventListener('click', 
 function() {
-    if (storedNumber === "") {
+    if (display.textContent === "") {
         firstNumber = 0;
     } else {
-        firstNumber = parseInt(storedNumber);
+        firstNumber = parseInt(display.textContent);
     }
-    storedNumber = "";
     operator = this.textContent;
-    display.textContent += operator;
+    clearNext = true;
 }));
 
 const equalsButton = document.querySelector('#equals');
 equalsButton.addEventListener('click', 
 function() {
-    if (storedNumber === "") {
+    if (display.textContent === "") {
         secondNumber = 0;
     } else {
-        secondNumber = parseInt(storedNumber);
+        secondNumber = parseInt(display.textContent);
     }
-    storedNumber = "";
     display.textContent = operate(operator, firstNumber,secondNumber);
+    clearNext = true;
 })
 
 
