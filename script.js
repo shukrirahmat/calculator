@@ -14,7 +14,9 @@ function divide(a, b) {
     return a / b;
 }
 
-function operate(operator, a, b) {
+function operate(operator, aStr, bStr) {
+    a = parseInt(aStr);
+    b = parseInt(bStr);
     switch (operator) {
         case '+':
             return add(a,b);
@@ -27,53 +29,74 @@ function operate(operator, a, b) {
     }
 }
 
-function inputDisplay(input) {
-    if (clearNext === true) {
-        clearInput();
-        clearNext = false;
+function updateInputDisplay(input) {
+    if (waitingForNextNumber) {
+        inputDisplay.textContent = "";
+        waitingForNextNumber = false;
     }
-    display.textContent += input;
+    inputDisplay.textContent += input;
+    if (inputDisplay.textContent.startsWith('0')) {
+        inputDisplay.textContent = inputDisplay.textContent.slice(1);
+    }
+}
+
+function updateOperationDisplay() {
+    operationDisplay.textContent = firstNumber + operator + secondNumber;
 }
 
 function clearInput() {
-    display.textContent = "";
+   inputDisplay.textContent = '0';
+   firstNumber = "";
+   operator = "";
+   secondNumber = "";
+   updateOperationDisplay();
 }
 
-let firstNumber, operator, secondNumber;
-let clearNext = true;
+let firstNumber = "";
+let operator = "";
+let secondNumber = "";
+let waitingForNextNumber = false;
 
-const display = document.querySelector('#display')
+const inputDisplay = document.querySelector('#inputDisplay');
+const operationDisplay = document.querySelector('#opDisplay');
 
 const clearEntry = document.querySelector('#clear');
 clearEntry.addEventListener('click', clearInput);
 
 const numbersButton = document.querySelectorAll('.number');
 numbersButton.forEach((number) => number.addEventListener('click',function() {
-    inputDisplay(this.textContent);
+    updateInputDisplay(this.textContent);
 }));
 
 const opButton = document.querySelectorAll('.op');
 opButton.forEach((op) => op.addEventListener('click', 
 function() {
-    if (display.textContent === "") {
-        firstNumber = 0;
-    } else {
-        firstNumber = parseInt(display.textContent);
+    if (!waitingForNextNumber) {
+        if (firstNumber == "") {
+            firstNumber = inputDisplay.textContent;
+            operator = this.textContent;
+        } else {
+            secondNumber = inputDisplay.textContent;
+            firstNumber = operate(operator, firstNumber, secondNumber);
+            operator = this.textContent;
+            secondNumber = "";
+        }
+        updateOperationDisplay();
+        waitingForNextNumber = true;
     }
-    operator = this.textContent;
-    clearNext = true;
 }));
 
 const equalsButton = document.querySelector('#equals');
 equalsButton.addEventListener('click', 
 function() {
-    if (display.textContent === "") {
-        secondNumber = 0;
-    } else {
-        secondNumber = parseInt(display.textContent);
+    if (!waitingForNextNumber) {
+        if (operator !== "") {
+            secondNumber = inputDisplay.textContent;
+            inputDisplay.textContent = operate(operator, firstNumber, secondNumber);
+        }
+        updateOperationDisplay();
+        waitingForNextNumber = true;
     }
-    display.textContent = operate(operator, firstNumber,secondNumber);
-    clearNext = true;
 })
 
 
