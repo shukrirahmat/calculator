@@ -15,7 +15,7 @@
     padding: 8px 0;
 }
 
-#screen{
+#display{
     background-color:khaki;
     color:darkgreen;
     text-align: right;
@@ -24,18 +24,8 @@
     border-style: solid;
     border-color:dimgray;
     word-wrap: break-word;
-}
-
-#opDisplay{
-    min-height: 20px;
-    font-size: 16px;
-    margin: 4px 4px;
-}
-
-#inputDisplay{
-    min-height: 56px;
     font-size: 48px;
-    margin: 4px 4px;
+    padding: 0 8px;
 }
 
 

@@ -14,9 +14,7 @@ function divide(a, b) {
     return a / b;
 }
 
-function operate(operator, aStr, bStr) {
-    a = parseInt(aStr);
-    b = parseInt(bStr);
+function operate(operator, a, b) {
     switch (operator) {
         case '+':
             return add(a,b);
@@ -29,80 +27,65 @@ function operate(operator, aStr, bStr) {
     }
 }
 
-function updateInputDisplay(input) {
-    if (waitingForNextNumber) {
-        updateOperationDisplay();
-        inputDisplay.textContent = "";
-        waitingForNextNumber = false;
+function enterNumber(number) {
+    if (newNumberInput) {
+        display.textContent = "";
+        newNumberInput = false;
     }
-    inputDisplay.textContent += input;
-    if (inputDisplay.textContent.startsWith('0')) {
-        inputDisplay.textContent = inputDisplay.textContent.slice(1);
-    }
-}
-
-function updateOperationDisplay() {
-    operationDisplay.textContent = firstNumber + operator + secondNumber;
-}
-
-function clearInput() {
-   inputDisplay.textContent = '0';
-   clearOperation();
-   updateOperationDisplay();
-}
-
-function clearOperation() {
-    firstNumber = "";
-    operator = "";
-    secondNumber = "";
-}
-
-let firstNumber = "";
-let operator = "";
-let secondNumber = "";
-let waitingForNextNumber = false;
-
-const inputDisplay = document.querySelector('#inputDisplay');
-const operationDisplay = document.querySelector('#opDisplay');
-
-const clearEntry = document.querySelector('#clear');
-clearEntry.addEventListener('click', clearInput);
-
-const numbersButton = document.querySelectorAll('.number');
-numbersButton.forEach((number) => number.addEventListener('click',function() {
-    updateInputDisplay(this.textContent);
-}));
-
-const opButton = document.querySelectorAll('.op');
-opButton.forEach((op) => op.addEventListener('click', 
-function() {
-    if (!waitingForNextNumber) {
-        if (firstNumber == "") {
-            firstNumber = inputDisplay.textContent;
-            operator = this.textContent;
-        } else {
-            secondNumber = inputDisplay.textContent;
-            firstNumber = operate(operator, firstNumber, secondNumber);
-            operator = this.textContent;
-            secondNumber = "";
+    if (display.textContent.length <= 9) {
+        display.textContent += number;
+        if (display.textContent.length > 1 && display.textContent.startsWith('0')) {
+            display.textContent = display.textContent.slice(1);
         }
-        updateOperationDisplay();
-        waitingForNextNumber = true;
     }
-}));
+}
+
+function enterOperation(op) {
+    if (operatorInput) {
+        firstNumber = parseInt(display.textContent);
+        operator = op;
+        newNumberInput = true;
+        equalsInput = true;
+    }
+}
+
+function enterEquals() {
+    if (equalsInput) {
+        secondNumber = parseInt(display.textContent);
+        let answer = operate(operator, firstNumber, secondNumber);
+        answer = Math.round(answer * 10000) / 10000;
+
+        display.textContent = answer;
+        resetOperation();
+        newNumberInput = true;
+        equalsInput = false;
+    }
+}
+
+function resetOperation() {
+    firstNumber = null;
+    secondNumber = null;
+    operator = null;
+}
+
+let firstNumber;
+let secondNumber;
+let operator;
+let newNumberInput = false;
+let operatorInput = true;
+let equalsInput = false;
+
+const display = document.querySelector('#display');
+
+const numberButtons = document.querySelectorAll('.number');
+numberButtons.forEach((btn) => (btn.addEventListener('click',function() {
+    enterNumber(this.textContent);
+})))
+
+const operatorButtons = document.querySelectorAll('.op');
+operatorButtons.forEach((btn) => btn.addEventListener('click',function() {
+    enterOperation(this.textContent);
+}))
 
 const equalsButton = document.querySelector('#equals');
-equalsButton.addEventListener('click', 
-function() {
-    if (!waitingForNextNumber) {
-        if (operator !== "") {
-            secondNumber = inputDisplay.textContent;
-            inputDisplay.textContent = operate(operator, firstNumber, secondNumber);
-        }
-        updateOperationDisplay();
-        clearOperation();
-        waitingForNextNumber = true;
-    }
-})
-
-
+equalsButton.addEventListener('click', enterEquals);
