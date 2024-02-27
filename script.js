@@ -15,22 +15,28 @@ function divide(a, b) {
 }
 
 function operate(operator, a, b) {
+    let answer;
     switch (operator) {
         case '+':
-            return add(a,b);
+            answer = add(a,b);
+            break;
         case '-':
-            return subtract(a,b);
+            answer = subtract(a,b);
+            break;
         case 'x':
-            return multiply(a,b);
+            answer = multiply(a,b);
+            break;
         case '÷':
-            return divide(a,b);
+            answer = divide(a,b);
     }
+    return Math.round(answer * 10000) / 10000;
 }
 
 function enterNumber(number) {
     if (newNumberInput) {
         display.textContent = "";
         newNumberInput = false;
+        operatorInput = true;
     }
     if (display.textContent.length <= 9) {
         display.textContent += number;
@@ -42,30 +48,63 @@ function enterNumber(number) {
 
 function enterOperation(op) {
     if (operatorInput) {
-        firstNumber = parseInt(display.textContent);
+        if (equalsInput) {
+            secondNumber = Number(display.textContent);
+            display.textContent = compressNumber(operate(operator, firstNumber, secondNumber));
+        }
+        if (display.textContent == 'NOPE') {
+            operatorInput = false;
+            resetOperation();
+            newNumberInput = true;
+            equalsInput = false;
+        } else {
+        firstNumber = Number(display.textContent);
         operator = op;
         newNumberInput = true;
         equalsInput = true;
+        }
     }
 }
 
 function enterEquals() {
     if (equalsInput) {
-        secondNumber = parseInt(display.textContent);
-        let answer = operate(operator, firstNumber, secondNumber);
-        answer = Math.round(answer * 10000) / 10000;
-
-        display.textContent = answer;
+        secondNumber = Number(display.textContent);
+        display.textContent = compressNumber(operate(operator, firstNumber, secondNumber));
         resetOperation();
         newNumberInput = true;
         equalsInput = false;
+        if (display.textContent == 'NOPE') {
+            operatorInput = false;
+        }
     }
+}
+
+function compressNumber(number) {
+    if (number.toString().length > 9) {
+        return number.toExponential(2);
+    }
+    if (number == Infinity) {
+        return "NOPE";
+    }
+    return number;
 }
 
 function resetOperation() {
     firstNumber = null;
     secondNumber = null;
     operator = null;
+}
+
+function clearEntry() {
+    resetOperation();
+    display.textContent = '0';
+    newNumberInput = false;
+    operatorInput = true;
+    equalsInput = false;
+}
+
+function resetButtonColor() {
+    allButtons.forEach((button) => button.style.backgroundColor = "");
 }
 
 let firstNumber;
@@ -77,15 +116,29 @@ let equalsInput = false;
 
 const display = document.querySelector('#display');
 
+const allButtons = document.querySelectorAll('button');
+
 const numberButtons = document.querySelectorAll('.number');
 numberButtons.forEach((btn) => (btn.addEventListener('click',function() {
+    resetButtonColor();
     enterNumber(this.textContent);
 })))
 
 const operatorButtons = document.querySelectorAll('.op');
 operatorButtons.forEach((btn) => btn.addEventListener('click',function() {
+    resetButtonColor();
+    this.style.backgroundColor = 'blue';
     enterOperation(this.textContent);
 }))
 
 const equalsButton = document.querySelector('#equals');
-equalsButton.addEventListener('click', enterEquals);
+equalsButton.addEventListener('click', function() {
+    resetButtonColor();
+    enterEquals();
+});
+
+const clearButton = document.querySelector('#clear');
+clearButton.addEventListener('click', function() {
+    resetButtonColor();
+    clearEntry();
+});
