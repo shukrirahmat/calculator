@@ -109,6 +109,16 @@ function enterDot() {
     }
 }
 
+function deleteNumber() {
+    if (display.textContent != 'NOPE' && !display.textContent.includes('e')) {
+        if (display.textContent.length == 1) {
+            display.textContent = 0;
+        } else {
+            display.textContent = display.textContent.slice(0,-1);
+        }
+    }
+}
+
 function resetButtonColor() {
     allButtons.forEach((button) => button.style.backgroundColor = "");
 }
@@ -151,3 +161,6 @@ clearButton.addEventListener('click', clearEntry);
 
 const dotButton = document.querySelector('#dot');
 dotButton.addEventListener('click', enterDot);
+
+const deleteButton = document.querySelector('#del');
+deleteButton.addEventListener('click', deleteNumber);
