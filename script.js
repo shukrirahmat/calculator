@@ -27,6 +27,9 @@ function operate(operator, a, b) {
             answer = multiply(a,b);
             break;
         case '÷':
+            if (b == 0) {
+                return 'NOPE';
+            }
             answer = divide(a,b);
     }
     return Math.round(answer * 10000) / 10000;
@@ -83,9 +86,6 @@ function compressNumber(number) {
     if (number.toString().length > 9) {
         return number.toExponential(2);
     }
-    if (number == Infinity) {
-        return "NOPE";
-    }
     return number;
 }
 
@@ -127,7 +127,9 @@ numberButtons.forEach((btn) => (btn.addEventListener('click',function() {
 const operatorButtons = document.querySelectorAll('.op');
 operatorButtons.forEach((btn) => btn.addEventListener('click',function() {
     resetButtonColor();
-    this.style.backgroundColor = 'blue';
+    if (operatorInput) {
+        this.style.backgroundColor = 'blue';
+    }
     enterOperation(this.textContent);
 }))
 
