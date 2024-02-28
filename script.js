@@ -43,7 +43,7 @@ function enterNumber(number) {
     }
     if (display.textContent.length <= 9) {
         display.textContent += number;
-        if (display.textContent.length > 1 && display.textContent.startsWith('0')) {
+        if (display.textContent.length > 1 && display.textContent.startsWith('0') && display.textContent.charAt(1) != '.') {
             display.textContent = display.textContent.slice(1);
         }
     }
