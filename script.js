@@ -103,6 +103,12 @@ function clearEntry() {
     equalsInput = false;
 }
 
+function enterDot() {
+    if (display.textContent != 'NOPE' && !display.textContent.includes('.')) {
+        display.textContent += '.';
+    }
+}
+
 function resetButtonColor() {
     allButtons.forEach((button) => button.style.backgroundColor = "");
 }
@@ -117,12 +123,16 @@ let equalsInput = false;
 const display = document.querySelector('#display');
 
 const allButtons = document.querySelectorAll('button');
+allButtons.forEach((btn) => {
+    if (!btn.classList.contains('op')) {
+        btn.addEventListener('click', resetButtonColor);
+    }
+})
 
 const numberButtons = document.querySelectorAll('.number');
-numberButtons.forEach((btn) => (btn.addEventListener('click',function() {
-    resetButtonColor();
+numberButtons.forEach((btn) => btn.addEventListener('click',function() {
     enterNumber(this.textContent);
-})))
+}))
 
 const operatorButtons = document.querySelectorAll('.op');
 operatorButtons.forEach((btn) => btn.addEventListener('click',function() {
@@ -134,13 +144,10 @@ operatorButtons.forEach((btn) => btn.addEventListener('click',function() {
 }))
 
 const equalsButton = document.querySelector('#equals');
-equalsButton.addEventListener('click', function() {
-    resetButtonColor();
-    enterEquals();
-});
+equalsButton.addEventListener('click', enterEquals);
 
 const clearButton = document.querySelector('#clear');
-clearButton.addEventListener('click', function() {
-    resetButtonColor();
-    clearEntry();
-});
+clearButton.addEventListener('click', clearEntry);
+
+const dotButton = document.querySelector('#dot');
+dotButton.addEventListener('click', enterDot);
